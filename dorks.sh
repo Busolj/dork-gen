@@ -7,18 +7,18 @@ output_file=""
 declare -A dorks
 
 dorks=(
-  ["sensitive files"]="ext:txt | ext:log | ext:cfg"
-  ["Database Configurations"]="ext:sql | ext:db | ext:sqlitedb"
-  ["Test Environments"]="inurl:test | inurl:env | inurl:dev | inurl:staging | inurl:sandbox | inurl:debug | inurl:temp | inurl:internal | inurl:demo"
-  ["Backup Infos"]="ext:bak | ext:old | ext:backup"
-  ["Passwords file exposed"]="inurl:passwd | inurl:shadow | inurl:htpasswd"
-  ["Admin/Login Panes"]="inurl:login | inurl:admin | inurl:dashboard | inurl:portal"
-  ["Source Code"]="ext:php | ext:js | ext:asp"
-  ["Documents"]="ext:doc | ext:docx | ext:pdf | ext:xls | ext:xlsx"
-  ["Cameras/IOT Devices Exposed"]="inurl:viewerframe?mode= | inurl:axis-cgi/jpg | inurl:view/index.shtml"
+  ["sensitive files"]="ext:txt OR ext:log OR ext:cfg"
+  ["Database Configurations"]="ext:sql OR ext:db OR ext:sqlitedb"
+  ["Test Environments"]="inurl:test OR inurl:env OR inurl:dev OR inurl:staging OR inurl:sandbox OR inurl:debug OR inurl:temp OR inurl:internal OR inurl:demo"
+  ["Backup Infos"]="ext:bak OR ext:old OR ext:backup"
+  ["Passwords file exposed"]="inurl:passwd OR inurl:shadow OR inurl:htpasswd"
+  ["Admin/Login Panes"]="inurl:login OR inurl:admin OR inurl:dashboard OR inurl:portal"
+  ["Source Code"]="ext:php OR ext:js OR ext:asp"
+  ["Documents"]="ext:doc OR ext:docx OR ext:pdf OR ext:xls OR ext:xlsx"
+  ["Cameras/IOT Devices Exposed"]="inurl:viewerframe?mode= OR inurl:axis-cgi/jpg OR inurl:view/index.shtml"
   ["Open Directories"]="intitle:index.of"
   ["API Logs"]="inurl:api inurl:log"
-  ["Errors with sensitive information"]='intext:"Fatal error" | intext:"syntax error"'
+  ["Errors with sensitive information"]='intext:"Fatal error" OR intext:"syntax error"'
 )
 
 usage() {
@@ -59,7 +59,7 @@ function fetch_domains {
     DOMAINS_DORK="${DOMAINS_DORK}site:$domain"
 
     if [[ "$COUNTER" -lt "$TOTAL_DOMAINS" ]]; then
-      DOMAINS_DORK="${DOMAINS_DORK} | "
+      DOMAINS_DORK="${DOMAINS_DORK} OR "
     fi
   done
 
@@ -97,7 +97,7 @@ handle_options() {
     -a | --all)
       DOMAIN_LIST_DORK=$(fetch_domains $DOMAINS_FILE)
       for dork in "${dorks[@]}"; do
-        echo $DOMAIN_LIST_DORK $dork
+        echo "($DOMAIN_LIST_DORK) ($dork)"
       done
 
       exit 1
@@ -113,11 +113,3 @@ handle_options() {
 }
 
 handle_options "$@"
-
-if [ "$verbose_mode" = true ]; then
-  echo "Verbose mode enabled."
-fi
-
-if [ -n "$output_file" ]; then
-  echo "Output file specified: $output_file"
-fi
