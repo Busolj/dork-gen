@@ -21,7 +21,6 @@ dorks=(
   ["Errors with sensitive information"]='intext:"Fatal error" | intext:"syntax error"'
 )
 
-# Function to display script usage
 usage() {
   echo "Usage: $0 [OPTIONS]"
   echo "Options:"
@@ -50,10 +49,10 @@ function generate_dork_for_domain {
 }
 
 function fetch_domains {
-  local domain_list=$(cat $DOMAINS_FILE) # Lê os domínios do arquivo
+  local domain_list=$(cat $DOMAINS_FILE)
 
   local COUNTER=0
-  local TOTAL_DOMAINS=$(wc -l <$DOMAINS_FILE) # Conta o número total de domínios
+  local TOTAL_DOMAINS=$(wc -l <$DOMAINS_FILE)
 
   for domain in $domain_list; do
     COUNTER=$((COUNTER + 1))
@@ -64,7 +63,7 @@ function fetch_domains {
     fi
   done
 
-  echo "$DOMAINS_DORK" # Exibe a saída final
+  echo "$DOMAINS_DORK"
 }
 
 function all_domains {
@@ -113,10 +112,8 @@ handle_options() {
   done
 }
 
-# Main script execution
 handle_options "$@"
 
-# Perform the desired actions based on the provided flags and arguments
 if [ "$verbose_mode" = true ]; then
   echo "Verbose mode enabled."
 fi
